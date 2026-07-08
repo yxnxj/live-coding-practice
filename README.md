@@ -20,7 +20,7 @@
 
 | Date | Problem | Type | Time | Result | Retry |
 |---|---|---|---:|---|---|
-|  | 01 Trip Service | Legacy testing / Refactoring | 1h | done | 0 |
+| 26-07-08 | 01 Trip Service | Legacy testing / Refactoring | 1h | done | 0 |
 |  | 02 Theatrical Players | Refactoring |  |  |  |
 |  | 03 Tennis | Branch cleanup / Domain rules |  |  |  |
 |  | 04 Cart Discount | Domain logic |  |  |  |
