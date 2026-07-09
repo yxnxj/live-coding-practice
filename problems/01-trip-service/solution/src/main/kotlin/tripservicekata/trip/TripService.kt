@@ -4,11 +4,11 @@ import tripservicekata.exception.UserNotLoggedInException
 import tripservicekata.session.UserSession
 import tripservicekata.user.User
 
-class TripService {
+open class TripService {
 
     fun getTripsByUser(user: User): List<Trip> {
         val tripList = mutableListOf<Trip>()
-        val loggedUser = UserSession.loggedUser
+        val loggedUser = this.getLoggedUser()
         var isFriend = false
 
         if (loggedUser != null) {
@@ -20,12 +20,20 @@ class TripService {
             }
 
             if (isFriend) {
-                tripList.addAll(TripDAO.findTripsByUser(user))
+                tripList.addAll(this.findTripsByUser(user))
             }
 
             return tripList
         }
 
         throw UserNotLoggedInException()
+    }
+
+    protected open fun getLoggedUser(): User? {
+        return UserSession.loggedUser
+    }
+
+    protected open fun findTripsByUser(user: User): List<Trip> {
+        return TripDAO.findTripsByUser(user)
     }
 }
