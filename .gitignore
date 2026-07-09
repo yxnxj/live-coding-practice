@@ -1,0 +1,7 @@
+.idea/
+**/out/
+**/build/
+.gradle/
+.kotlin/
+.DS_Store
+*.class
