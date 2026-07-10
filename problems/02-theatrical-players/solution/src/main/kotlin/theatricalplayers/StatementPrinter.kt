@@ -1,51 +1,57 @@
 package theatricalplayers
 
+import theatricalplayers.playtypes.PlayTypeComedy
+import theatricalplayers.playtypes.PlayTypeInterface
+import theatricalplayers.playtypes.PlayTypeTragedy
 import java.text.NumberFormat
 import java.util.Locale
-import kotlin.math.floor
-import kotlin.math.max
 
 class StatementPrinter {
+    companion object{
+        val calculateHandler: Map<String, PlayTypeInterface> = mapOf(
+            "tragedy" to PlayTypeTragedy,
+            "comedy" to PlayTypeComedy
+        )
+    }
+
+    private val format = { number: Long -> NumberFormat.getCurrencyInstance(Locale.US).format(number) }
 
     fun print(invoice: Invoice, plays: Map<String, Play>): String {
+        var result = "Statement for ${invoice.customer}\n"
+        val statementInfo = createStatementInfo(invoice, plays)
+
+        result += statementInfo.lines.joinToString("") {
+            "  ${it.playName}: ${format((it.amount / 100).toLong())} (${it.audience} seats)\n"
+        }
+
+        result += "Amount owed is ${format((statementInfo.totalAmount / 100).toLong())}\n"
+        result += "You earned ${statementInfo.volumeCredits} credits\n"
+        return result
+    }
+
+    fun createStatementInfo(invoice: Invoice, plays: Map<String, Play>): StatementInfo{
         var totalAmount = 0
         var volumeCredits = 0
-        var result = "Statement for ${invoice.customer}\n"
-
-        val format = { number: Long -> NumberFormat.getCurrencyInstance(Locale.US).format(number) }
+        val statementLines = mutableListOf<StatementLine>()
 
         invoice.performances.forEach { performance ->
             val play = plays.getValue(performance.playId)
             var thisAmount = 0
 
-            when (play.type) {
-                "tragedy" -> {
-                    thisAmount = 40000
-                    if (performance.audience > 30) {
-                        thisAmount += 1000 * (performance.audience - 30)
-                    }
-                }
-                "comedy" -> {
-                    thisAmount = 30000
-                    if (performance.audience > 20) {
-                        thisAmount += 10000 + 500 * (performance.audience - 20)
-                    }
-                    thisAmount += 300 * performance.audience
-                }
-                else -> throw Error("unknown type: ${play.type}")
-            }
+            calculateHandler[play.type]?.let { handler ->
+                thisAmount = handler.calculateAmount(performance)
+                volumeCredits += handler.calculateVolumeCredits(performance)
+            } ?: throw Error("unknown type: ${play.type}")
 
-            volumeCredits += max(performance.audience - 30, 0)
-            if ("comedy" == play.type) {
-                volumeCredits += floor((performance.audience / 5).toDouble()).toInt()
-            }
-
-            result += "  ${play.name}: ${format((thisAmount / 100).toLong())} (${performance.audience} seats)\n"
+            statementLines.add(StatementLine(playName = play.name, amount = thisAmount, audience = performance.audience))
             totalAmount += thisAmount
         }
 
-        result += "Amount owed is ${format((totalAmount / 100).toLong())}\n"
-        result += "You earned $volumeCredits credits\n"
-        return result
+        return StatementInfo(
+            totalAmount = totalAmount,
+            volumeCredits = volumeCredits,
+            lines = statementLines
+        )
     }
+
 }
