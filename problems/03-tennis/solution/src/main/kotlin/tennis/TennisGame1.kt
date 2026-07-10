@@ -2,52 +2,65 @@ package tennis
 
 class TennisGame1(private val player1Name: String, private val player2Name: String) : TennisGame {
 
-    private var m_score1: Int = 0
-    private var m_score2: Int = 0
+    private var player1Score: Int = 0
+    private var player2Score: Int = 0
+
+    companion object{
+        private const val SCORE_LOVE = 0
+        private const val SCORE_FIFTEEN = 1
+        private const val SCORE_THIRTY = 2
+        private const val SCORE_FORTY = 3
+
+    }
+
+    fun isTie(): Boolean = player1Score == player2Score
+
+    fun handleTieScore(): String{
+        return when (player1Score) {
+            SCORE_LOVE -> "Love-All"
+            SCORE_FIFTEEN -> "Fifteen-All"
+            SCORE_THIRTY -> "Thirty-All"
+            else -> "Deuce"
+        }
+    }
+
+    fun isEndGame(): Boolean = player1Score >= 4 || player2Score >= 4
+
+    fun handleEndGameScore(): String{
+        return when (player1Score-player2Score){
+            1 -> "Advantage player1"
+            -1 -> "Advantage player2"
+            in 2..Int.MAX_VALUE -> "Win for player1"
+            in Int.MIN_VALUE..-2 -> "Win for player2"
+            else -> throw IllegalStateException("Invalid end game score state: $player1Score-$player2Score")
+        }
+    }
+
+    fun getScore(scoreNum: Int): String{
+        return when(scoreNum) {
+            SCORE_LOVE -> "Love"
+            SCORE_FIFTEEN -> "Fifteen"
+            SCORE_THIRTY -> "Thirty"
+            SCORE_FORTY -> "Forty"
+            else -> throw IllegalArgumentException("Invalid score: $scoreNum")
+        }
+    }
 
     override fun wonPoint(playerName: String) {
-        if (playerName === "player1")
-            m_score1 += 1
-        else
-            m_score2 += 1
+        when (playerName) {
+            "player1" -> player1Score += 1
+            "player2" -> player2Score += 1
+            else -> throw IllegalArgumentException("Invalid player name: $playerName")
+        }
     }
 
     override fun getScore(): String {
-        var score = ""
-        var tempScore = 0
-        if (m_score1 == m_score2) {
-            when (m_score1) {
-                0 -> score = "Love-All"
-                1 -> score = "Fifteen-All"
-                2 -> score = "Thirty-All"
-                else -> score = "Deuce"
-            }
-        } else if (m_score1 >= 4 || m_score2 >= 4) {
-            val minusResult = m_score1 - m_score2
-            if (minusResult == 1)
-                score = "Advantage player1"
-            else if (minusResult == -1)
-                score = "Advantage player2"
-            else if (minusResult >= 2)
-                score = "Win for player1"
-            else
-                score = "Win for player2"
-        } else {
-            for (i in 1..2) {
-                if (i == 1)
-                    tempScore = m_score1
-                else {
-                    score += "-"
-                    tempScore = m_score2
-                }
-                when (tempScore) {
-                    0 -> score += "Love"
-                    1 -> score += "Fifteen"
-                    2 -> score += "Thirty"
-                    3 -> score += "Forty"
-                }
-            }
+        if (isTie()) {
+            return handleTieScore()
+        } else if (isEndGame()) {
+            return handleEndGameScore()
         }
-        return score
+        return listOf(getScore(player1Score), getScore(player2Score)).joinToString("-")
     }
+
 }
