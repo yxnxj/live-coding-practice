@@ -6,7 +6,7 @@ Branch cleanup / Domain rules
 
 ## Source
 
-- https://codingdojo.org/kata/Tennis/
+- https://github.com/emilybache/tennis-refactoring-kata
 
 ## Problem
 
