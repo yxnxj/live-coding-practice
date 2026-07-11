@@ -1,16 +1,5 @@
 package cartdiscount
 
-enum class Category {
-    BOOK,
-    FOOD,
-    OTHER,
-}
-
-enum class Membership {
-    NORMAL,
-    VIP,
-}
-
 data class CartItem(
     val name: String,
     val category: Category,
@@ -24,11 +13,6 @@ data class CheckoutRequest(
     val membership: Membership = Membership.NORMAL,
 )
 
-data class Discount(
-    val name: String,
-    val amount: Int,
-)
-
 data class CheckoutResult(
     val subtotal: Int,
     val discounts: List<Discount>,
@@ -36,23 +20,33 @@ data class CheckoutResult(
     val total: Int,
 )
 
-data class DiscountResult(
-    val discounts: List<Discount>,
-    val totalAmount: Int,
-)
-
 class CheckoutService {
     fun checkout(request: CheckoutRequest): CheckoutResult {
         val subtotal = calculateSubtotal(request.items)
+
+        // 카테고리 할인: 가장 처음 할인 적용
         val categoryDiscountResult = calculateCategoryDiscount(request.items)
+        var total = subtotal - categoryDiscountResult.totalAmount
+        val discounts: MutableList<Discount> = categoryDiscountResult.discounts.toMutableList()
 
-        val shippingFee = calculateShippingFee(subtotal)
+        //쿠폰 할인: 카테고리 할인 적용 이후 가격으로 계산
+        request.couponCode?.let {
+            val couponDiscountResult = calculateCouponDiscount(it, total)
+            total -= couponDiscountResult.totalAmount
+            discounts.addAll(couponDiscountResult.discounts)
+        }
 
+        //멤버십 할인: 쿠폰 할인 적용 이후 가격으로 계산
+
+        //배송비 계산 : 할인 적용 이후 가격으로 계산
+        val shippingFee = calculateShippingFee(total)
+
+        total += shippingFee
         return CheckoutResult(
             subtotal = subtotal,
-            discounts = categoryDiscountResult.discounts,
+            discounts = discounts,
             shippingFee = shippingFee,
-            total = subtotal + shippingFee- categoryDiscountResult.totalAmount,
+            total = total,
         )
     }
 
@@ -67,42 +61,6 @@ class CheckoutService {
         }
 
         return subtotal
-    }
-
-    fun calculateCategoryDiscount(items: List<CartItem>): DiscountResult {
-        val suffixDiscountName = "_CATEGORY"
-        val discounts = mutableListOf<Discount>()
-        var totalAmount = 0
-
-        items.forEach { it ->
-            val subtotal = it.unitPrice * it.quantity
-            var name = ""
-            var amount = 0
-
-            when (it.category) {
-                Category.BOOK -> {
-                    amount = (subtotal * 0.1).toInt()
-                    name = "BOOK$suffixDiscountName"
-
-                }
-                Category.FOOD -> {
-                    amount = (subtotal * 0.05).toInt()
-                    name = "FOOD$suffixDiscountName"
-                }
-                else -> { // No discount for OTHER category
-                }
-            }
-
-            if (amount != 0){
-                discounts.add(Discount(name, amount))
-                totalAmount += amount
-            }
-        }
-
-        return DiscountResult(
-            discounts = discounts,
-            totalAmount = totalAmount,
-        )
     }
 
     fun calculateShippingFee(subtotal: Int): Int {

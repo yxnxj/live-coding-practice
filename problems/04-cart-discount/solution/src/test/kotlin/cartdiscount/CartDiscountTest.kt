@@ -4,7 +4,7 @@ fun main() {
     val test = CartDiscountTest()
     test.chargesShippingWhenDiscountedAmountIsBelowThreshold()
     test.appliesCategoryDiscounts()
-//    test.appliesWelcomeCouponAfterCategoryDiscount()
+    test.appliesWelcomeCouponAfterCategoryDiscount()
 //    test.appliesAmountCouponAtThreshold()
 //    test.appliesVipDiscountAfterCoupon()
 //    test.usesDiscountedAmountForFreeShippingThreshold()
