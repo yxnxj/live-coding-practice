@@ -3,7 +3,7 @@ package cartdiscount
 fun main() {
     val test = CartDiscountTest()
     test.chargesShippingWhenDiscountedAmountIsBelowThreshold()
-//    test.appliesCategoryDiscounts()
+    test.appliesCategoryDiscounts()
 //    test.appliesWelcomeCouponAfterCategoryDiscount()
 //    test.appliesAmountCouponAtThreshold()
 //    test.appliesVipDiscountAfterCoupon()
