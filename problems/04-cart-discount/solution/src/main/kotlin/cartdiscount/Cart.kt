@@ -1,11 +1,43 @@
 package cartdiscount
 
-data class CartItem(val name: String, val category: String, val unitPrice: Int, val quantity: Int)
-data class CheckoutResult(val subtotal: Int, val discounts: List<String>, val shippingFee: Int, val total: Int)
+enum class Category {
+    BOOK,
+    FOOD,
+    OTHER,
+}
+
+enum class Membership {
+    NORMAL,
+    VIP,
+}
+
+data class CartItem(
+    val name: String,
+    val category: Category,
+    val unitPrice: Int,
+    val quantity: Int,
+)
+
+data class CheckoutRequest(
+    val items: List<CartItem>,
+    val couponCode: String? = null,
+    val membership: Membership = Membership.NORMAL,
+)
+
+data class Discount(
+    val name: String,
+    val amount: Int,
+)
+
+data class CheckoutResult(
+    val subtotal: Int,
+    val discounts: List<Discount>,
+    val shippingFee: Int,
+    val total: Int,
+)
 
 class CheckoutService {
-    fun checkout(items: List<CartItem>): CheckoutResult {
-        val subtotal = items.sumOf { it.unitPrice * it.quantity }
-        return CheckoutResult(subtotal = subtotal, discounts = emptyList(), shippingFee = 3000, total = subtotal + 3000)
+    fun checkout(request: CheckoutRequest): CheckoutResult {
+        TODO("Implement the checkout rules described in README.md")
     }
 }

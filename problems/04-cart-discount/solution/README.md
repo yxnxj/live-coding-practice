@@ -6,7 +6,7 @@ Domain logic
 
 ## Source
 
-- Custom practice problem
+- Custom practice problem created for this repository. It is not copied from a published kata.
 
 ## Problem
 
@@ -71,6 +71,9 @@ Domain logic
 
 각 할인은 이전 단계의 결과 금액을 기준으로 계산한다.
 
+퍼센트 할인 금액에 소수점이 생기면 소수점 이하는 버린다. 예를 들어
+`33333`원의 10% 할인액은 `3333`원이다. 모든 금액은 원 단위 정수로 계산한다.
+
 ## Output Model
 
 결과에는 다음 정보가 포함되어야 한다.
@@ -79,6 +82,19 @@ Domain logic
 - 적용된 할인 목록. 각 항목은 이름과 금액을 가진다.
 - `shippingFee`
 - `total`
+
+할인 목록의 이름은 테스트에 정의된 `BOOK_CATEGORY`, `FOOD_CATEGORY`,
+`WELCOME10`, `AMOUNT5000`, `VIP_MEMBERSHIP`을 사용하고, 실제로 금액이
+차감된 할인만 적용 순서대로 포함한다.
+
+## Starter API
+
+시작 코드는 필요한 입력과 출력 타입만 제공하며 `CheckoutService.checkout`은
+의도적으로 구현되어 있지 않다. 테스트를 하나씩 통과시키며 구현한다.
+
+```kotlin
+fun checkout(request: CheckoutRequest): CheckoutResult
+```
 
 ## Suggested Test Cases
 
