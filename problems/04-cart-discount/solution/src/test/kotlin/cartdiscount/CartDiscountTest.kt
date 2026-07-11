@@ -5,7 +5,7 @@ fun main() {
     test.chargesShippingWhenDiscountedAmountIsBelowThreshold()
     test.appliesCategoryDiscounts()
     test.appliesWelcomeCouponAfterCategoryDiscount()
-//    test.appliesAmountCouponAtThreshold()
+    test.appliesAmountCouponAtThreshold()
 //    test.appliesVipDiscountAfterCoupon()
 //    test.usesDiscountedAmountForFreeShippingThreshold()
 //    test.rejectsInvalidItemInput()

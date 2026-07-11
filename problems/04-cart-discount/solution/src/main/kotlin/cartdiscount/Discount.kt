@@ -8,6 +8,7 @@ enum class Category {
 
 enum class Coupon {
     WELCOME10,
+    AMOUNT5000,
 }
 
 enum class Membership {
@@ -67,6 +68,11 @@ fun calculateCouponDiscount(couponCode: String?, total: Int): DiscountResult {
     when (couponCode) {
         Coupon.WELCOME10.name -> {
             amount = (total * 0.1).toInt()
+        }
+        Coupon.AMOUNT5000.name -> {
+            if (total >= 50_000) {
+                amount = 5_000
+            }
         }
         else -> { throw IllegalArgumentException("Invalid coupon code: $couponCode")
         }
