@@ -6,10 +6,10 @@ fun main() {
     test.appliesCategoryDiscounts()
     test.appliesWelcomeCouponAfterCategoryDiscount()
     test.appliesAmountCouponAtThreshold()
-//    test.appliesVipDiscountAfterCoupon()
-//    test.usesDiscountedAmountForFreeShippingThreshold()
-//    test.rejectsInvalidItemInput()
-//    test.rejectsUnknownCoupon()
+    test.appliesVipDiscountAfterCoupon()
+    test.usesDiscountedAmountForFreeShippingThreshold()
+    test.rejectsInvalidItemInput()
+    test.rejectsUnknownCoupon()
     println("All tests passed")
 }
 

@@ -88,4 +88,28 @@ fun calculateCouponDiscount(couponCode: String?, total: Int): DiscountResult {
         )
     }
 
+
+}
+
+fun calculateMembershipDiscount(membership: Membership, total: Int): DiscountResult {
+    var amount = 0
+    val suffixDiscountName = "_MEMBERSHIP"
+
+    when (membership) {
+        Membership.VIP -> {
+            amount = (total * 0.03).toInt()
+        }
+        else -> { // No discount for NORMAL membership
+        }
+    }
+
+    return if (amount > 0) DiscountResult(
+        discounts = listOf(Discount(membership.name+suffixDiscountName, amount)),
+        totalAmount = amount,
+    ) else {
+        DiscountResult(
+            discounts = emptyList(),
+            totalAmount = 0,
+        )
+    }
 }

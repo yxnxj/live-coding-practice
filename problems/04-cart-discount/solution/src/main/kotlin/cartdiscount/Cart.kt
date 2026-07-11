@@ -37,6 +37,9 @@ class CheckoutService {
         }
 
         //멤버십 할인: 쿠폰 할인 적용 이후 가격으로 계산
+        val membershipDiscountResult = calculateMembershipDiscount(request.membership, total)
+        total -= membershipDiscountResult.totalAmount
+        discounts.addAll(membershipDiscountResult.discounts)
 
         //배송비 계산 : 할인 적용 이후 가격으로 계산
         val shippingFee = calculateShippingFee(total)
