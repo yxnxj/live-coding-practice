@@ -28,10 +28,10 @@ class TennisGame1(private val player1Name: String, private val player2Name: Stri
 
     fun handleEndGameScore(): String{
         return when (player1Score-player2Score){
-            1 -> "Advantage player1"
-            -1 -> "Advantage player2"
-            in 2..Int.MAX_VALUE -> "Win for player1"
-            in Int.MIN_VALUE..-2 -> "Win for player2"
+            1 -> "Advantage $player1Name"
+            -1 -> "Advantage $player2Name"
+            in 2..Int.MAX_VALUE -> "Win for $player1Name"
+            in Int.MIN_VALUE..-2 -> "Win for $player2Name"
             else -> throw IllegalStateException("Invalid end game score state: $player1Score-$player2Score")
         }
     }
@@ -48,8 +48,8 @@ class TennisGame1(private val player1Name: String, private val player2Name: Stri
 
     override fun wonPoint(playerName: String) {
         when (playerName) {
-            "player1" -> player1Score += 1
-            "player2" -> player2Score += 1
+            player1Name -> player1Score += 1
+            player2Name -> player2Score += 1
             else -> throw IllegalArgumentException("Invalid player name: $playerName")
         }
     }
