@@ -324,6 +324,130 @@ for (const value of values) {
 const count = counts.get(value) ?? 0;
 ```
 
+## 9. for문 선택 기준
+
+### 인덱스가 필요할 때
+
+코딩 테스트에서 결과로 인덱스를 반환하거나 앞뒤 원소를 확인해야 할 때 가장 무난하다.
+
+```javascript
+for (let i = 0; i < values.length; i++) {
+  const value = values[i];
+}
+```
+
+두 수의 합처럼 현재 인덱스를 반환해야 하는 문제에 적합하다.
+
+```javascript
+for (let i = 0; i < prices.length; i++) {
+  const currentPrice = prices[i];
+  const complement = target - currentPrice;
+}
+```
+
+### 값만 필요할 때
+
+인덱스를 사용하지 않는다면 `for...of`가 간결하다.
+
+```javascript
+for (const value of values) {
+  console.log(value);
+}
+```
+
+객체 배열도 동일하다.
+
+```javascript
+for (const vehicle of vehicles) {
+  console.log(vehicle.price);
+}
+```
+
+### 인덱스와 값을 함께 구조 분해할 때
+
+```javascript
+for (const [index, value] of values.entries()) {
+  console.log(index, value);
+}
+```
+
+전통적인 `for`문보다 반드시 좋은 것은 아니다. 단순한 알고리즘에서는 다음 형식이 더 익숙하고 빠르게 작성하기 쉽다.
+
+```javascript
+for (let i = 0; i < values.length; i++) {
+}
+```
+
+### 객체의 key와 value를 순회할 때
+
+```javascript
+for (const [key, value] of Object.entries(object)) {
+  console.log(key, value);
+}
+```
+
+Map은 Map 자체를 바로 순회할 수 있다.
+
+```javascript
+for (const [key, value] of map) {
+  console.log(key, value);
+}
+```
+
+### 반복을 즉시 종료할 때
+
+현재 반복문만 종료:
+
+```javascript
+for (const value of values) {
+  if (value === target) {
+    break;
+  }
+}
+```
+
+현재 반복만 건너뛰고 다음 반복 진행:
+
+```javascript
+for (const value of values) {
+  if (value < 0) {
+    continue;
+  }
+
+  console.log(value);
+}
+```
+
+함수 자체를 종료하며 결과 반환:
+
+```javascript
+function findValue(values, target) {
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] === target) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+```
+
+### forEach 사용 시 주의
+
+`forEach()` 콜백 내부의 `return`은 바깥 함수를 종료하지 않는다.
+
+```javascript
+function findValue(values, target) {
+  values.forEach((value, index) => {
+    if (value === target) {
+      return index; // findValue의 반환값이 되지 않음
+    }
+  });
+}
+```
+
+반복 중 결과를 즉시 반환하거나 `break`해야 하는 알고리즘에서는 일반 `for`문 또는 `for...of`를 사용한다.
+
 ## 추가로 함께 외울 문법
 
 ### 유한한 숫자인지 확인
