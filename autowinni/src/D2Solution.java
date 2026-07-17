@@ -79,14 +79,16 @@ public class D2Solution {
 
         List<ProductSummary> results = new ArrayList<>(summaries.values());
         results.sort((a, b) -> {
-            if (a.totalRevenue != b.totalRevenue){
-                return Long.compare(b.totalRevenue, a.totalRevenue);
-            } else if (a.totalQuantity != b.totalQuantity){
-                return Integer.compare(b.totalQuantity, a.totalQuantity);
-            } else {
-                return a.productName.compareTo(b.productName);
-            }
+            // 1. `totalRevenue` 내림차순
+            if (a.totalRevenue != b.totalRevenue) return Long.compare(b.totalRevenue, a.totalRevenue);
+
+            // 2. 매출액이 같으면 `totalQuantity` 내림차순
+            if(a.totalQuantity != b.totalQuantity) return Integer.compare(b.totalQuantity, a.totalQuantity);
+
+            // 3. 매출액과 수량이 모두 같으면 `productName` 오름차순
+            return a.productName.compareTo(b.productName);
         });
+
 
         return results;
     }
