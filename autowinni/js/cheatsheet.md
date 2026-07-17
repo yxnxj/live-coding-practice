@@ -84,6 +84,8 @@ const vehicleMap = new Map([
 ]);
 ```
 
+각 내부 배열이 `[key, value]` 한 쌍이다. `const`로 선언해도 Map 내부 값은 `set()`으로 추가하거나 변경할 수 있다.
+
 기본 사용법:
 
 ```javascript
@@ -448,6 +450,55 @@ function findValue(values, target) {
 
 반복 중 결과를 즉시 반환하거나 `break`해야 하는 알고리즘에서는 일반 `for`문 또는 `for...of`를 사용한다.
 
+## 10. 배열을 스택으로 사용
+
+JavaScript에는 별도의 내장 `Stack` 클래스가 없으므로 보통 배열을 사용한다.
+
+```javascript
+const stack = [];
+
+stack.push("A");                    // 맨 위에 추가
+const top = stack[stack.length - 1]; // 맨 위 값 확인
+const removed = stack.pop();         // 맨 위 값을 제거하며 반환
+const isEmpty = stack.length === 0;   // 빈 스택인지 확인
+```
+
+스택은 마지막에 넣은 값을 먼저 꺼내는 LIFO 구조다. 빈 스택에서 `pop()`을 호출하면 `undefined`가 반환된다.
+
+## 11. 문자 비교
+
+JavaScript에는 별도의 `char` 타입이 없다. 한 글자도 `string`이므로 `===`로 비교한다.
+
+```javascript
+const char = text[i];
+
+if (char === "(") {
+  // 같은 문자
+}
+```
+
+스택의 맨 위 문자와 비교:
+
+```javascript
+if (stack[stack.length - 1] === expected) {
+  // 같은 문자
+}
+```
+
+## 12. ==와 ===의 차이
+
+`==`는 비교 전에 타입을 자동 변환하고, `===`는 타입과 값이 모두 같은지 비교한다.
+
+```javascript
+5 == "5";   // true
+5 === "5";  // false
+
+0 == false;  // true
+0 === false; // false
+```
+
+코딩 테스트에서는 예상하지 못한 타입 변환을 피하기 위해 기본적으로 `===`와 `!==`를 사용한다.
+
 ## 추가로 함께 외울 문법
 
 ### 유한한 숫자인지 확인
@@ -495,9 +546,19 @@ value.trim().length === 0
 Number.isFinite(value)
 
 const map = new Map()
+const initializedMap = new Map([[key1, value1], [key2, value2]])
 map.has(key)
 map.get(key)
 map.set(key, value)
+
+const stack = []
+stack.push(value)
+stack[stack.length - 1]
+stack.pop()
+stack.length === 0
+
+charA === charB
+charA !== charB
 
 const set = new Set()
 set.has(value)

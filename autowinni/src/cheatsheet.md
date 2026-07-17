@@ -71,6 +71,56 @@ return a.productName.compareTo(b.productName);
 return b.productName.compareTo(a.productName);
 ```
 
+## String을 char 배열로 변환
+
+문자열을 문자 단위로 순회하거나 각 문자를 수정해야 할 때 `toCharArray()`를 사용한다.
+
+```java
+String text = "hello";
+char[] chars = text.toCharArray();
+
+for (char ch : chars) {
+    System.out.println(ch);
+}
+```
+
+인덱스로 바로 순회하기만 한다면 배열로 변환하지 않고 `charAt()`을 사용할 수도 있다.
+
+```java
+for (int i = 0; i < text.length(); i++) {
+    char ch = text.charAt(i);
+}
+```
+
+`char[]`을 다시 `String`으로 변환할 때는 `new String(chars)`를 사용한다.
+
+```java
+String converted = new String(chars);
+```
+
+## Map의 값을 List로 변환
+
+`Map.values()`가 반환하는 `Collection`을 `ArrayList` 생성자에 전달한다.
+
+```java
+Map<String, ProductSummary> summaries = new HashMap<>();
+
+List<ProductSummary> results
+        = new ArrayList<>(summaries.values());
+```
+
+두 변환을 함께 기억하면 다음과 같다.
+
+```java
+char[] chars = text.toCharArray();
+List<ProductSummary> results = new ArrayList<>(summaries.values());
+```
+
+- `String → char[]`: 문자열의 변환 메서드 `toCharArray()` 사용
+- `Map.values() → List`: `Collection`을 받는 `ArrayList` 생성자 사용
+
+모양은 비슷하지만, 하나는 메서드가 새 배열을 반환하고 다른 하나는 생성자가 컬렉션의 요소를 복사한다.
+
 ## reversed() 사용 시 주의
 
 ```java

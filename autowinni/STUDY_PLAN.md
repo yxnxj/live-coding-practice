@@ -111,6 +111,11 @@ JS 풀이:        js/d{일차}_problem2.js
 - [ ] 동률 처리 조건 구현
 - [ ] 빈 입력 처리
 
+관련 파일:
+
+- [문제](src/d3_problem.md)
+- [풀이](src/D3Solution.java)
+
 ### JavaScript 1 — 올바른 괄호 문자열
 
 - [ ] Stack으로 여는 괄호 저장
@@ -118,12 +123,22 @@ JS 풀이:        js/d{일차}_problem2.js
 - [ ] Stack이 비어 있는 경우 처리
 - [ ] 최종 Stack 상태 확인
 
+관련 파일:
+
+- [문제](js/d3_problem1.md)
+- [풀이](js/d3_problem1.js)
+
 ### JavaScript 2 — 차량 객체 다중 조건 정렬
 
 - [ ] 가격 내림차순
 - [ ] 가격이 같으면 연식 내림차순
 - [ ] 연식도 같으면 ID 오름차순
 - [ ] 원본 배열 복사 후 정렬
+
+관련 파일:
+
+- [문제](js/d3_problem2.md)
+- [풀이](js/d3_problem2.js)
 
 ## D4 — 7월 18일 토요일
 
