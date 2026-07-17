@@ -24,28 +24,7 @@ for (let i = 0; i < prices.length; i++) {
 }
 ```
 
-JavaScript Debug Terminal은 `launch.json`을 만들지 않고 해당 터미널에서 실행한 Node.js 프로세스에 VS Code 디버거를 자동으로 연결한다.
-
-### 최소 launch.json
-
-JavaScript Debug Terminal을 사용할 수 없을 때 `.vscode/launch.json`에 작성한다.
-
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "현재 파일",
-      "program": "${file}",
-      "console": "integratedTerminal"
-    }
-  ]
-}
-```
-
-현재 JavaScript 파일을 열고 `F5`를 누른다. Mac에서 F5가 기능키로 동작하면 `Fn + F5` 또는 `Run → Start Debugging`을 사용한다.
+JavaScript Debug Terminal은 해당 터미널에서 실행한 Node.js 프로세스에 VS Code 디버거를 자동으로 연결한다.
 
 ## 2. 배열 타입인지 확인
 
@@ -86,6 +65,24 @@ const vehicleMap = new Map([
 
 각 내부 배열이 `[key, value]` 한 쌍이다. `const`로 선언해도 Map 내부 값은 `set()`으로 추가하거나 변경할 수 있다.
 
+### Map 핵심 속성과 메서드
+
+| 문법 | 동작 | 반환값 |
+| --- | --- | --- |
+| `map.set(key, value)` | 값 추가 또는 수정 | Map 자신 |
+| `map.get(key)` | 값 조회 | 값, 없으면 `undefined` |
+| `map.has(key)` | 키 존재 여부 확인 | `true` 또는 `false` |
+| `map.delete(key)` | 해당 키와 값 삭제 | 삭제했으면 `true` |
+| `map.clear()` | 모든 값 삭제 | `undefined` |
+| `map.size` | 저장된 항목 개수 확인 | 숫자 |
+
+`size`는 메서드가 아닌 속성이므로 괄호를 붙이지 않는다.
+
+```javascript
+vehicleMap.size; // 올바름
+// vehicleMap.size(); // 오류
+```
+
 기본 사용법:
 
 ```javascript
@@ -108,45 +105,12 @@ for (const [key, value] of vehicleMap) {
 Map 값을 배열로 변환:
 
 ```javascript
+const keys = [...vehicleMap.keys()];
 const values = [...vehicleMap.values()];
 const entries = [...vehicleMap.entries()];
 ```
 
-## 4. 빈 문자열인지 확인
-
-공백만 있는 문자열도 빈 문자열로 처리:
-
-```javascript
-if (value.trim().length === 0) {
-  // 빈 문자열
-}
-```
-
-타입 검사와 함께 사용:
-
-```javascript
-if (typeof value !== "string" || value.trim().length === 0) {
-  // 올바르지 않은 문자열
-}
-```
-
-간단히 다음처럼 작성할 수도 있다.
-
-```javascript
-if (typeof value !== "string" || !value.trim()) {
-  // 올바르지 않은 문자열
-}
-```
-
-`trim()`을 타입 검사보다 먼저 호출하면 `null`, `undefined`, 숫자에서 오류가 발생한다.
-
-```javascript
-// 잘못된 순서
-if (!value.trim() || typeof value !== "string") {
-}
-```
-
-## 5. 문자열 타입인지 확인
+## 4. 문자열 타입인지 확인
 
 ```javascript
 typeof value === "string"
@@ -175,7 +139,7 @@ typeof 100;       // "number"
 typeof "100";     // "string"
 ```
 
-## 6. Comparator에서 여러 조건 비교
+## 5. Comparator에서 여러 조건 비교
 
 JavaScript의 `sort()`에 비교 함수를 전달한다.
 
@@ -230,7 +194,7 @@ cars.sort((a, b) => {
 const sorted = [...cars].sort(comparator);
 ```
 
-## 7. 소수점 반올림
+## 6. 소수점 반올림
 
 정수로 반올림:
 
@@ -270,7 +234,7 @@ summary.averagePrice = Math.round(
 );
 ```
 
-## 8. Map의 has, get, set
+## 7. Map의 has, get, set
 
 ### 존재 여부 확인
 
@@ -326,7 +290,7 @@ for (const value of values) {
 const count = counts.get(value) ?? 0;
 ```
 
-## 9. for문 선택 기준
+## 8. for문 선택 기준
 
 ### 인덱스가 필요할 때
 
@@ -396,63 +360,39 @@ for (const [key, value] of map) {
 }
 ```
 
-### 반복을 즉시 종료할 때
+## 9. Array를 List와 Stack으로 사용
 
-현재 반복문만 종료:
+JavaScript에는 별도의 내장 `List`나 `Stack` 클래스가 없다. 일반적인 목록과 스택 모두 `Array`를 사용한다.
 
-```javascript
-for (const value of values) {
-  if (value === target) {
-    break;
-  }
-}
+### 배열 앞과 뒤
+
+```text
+앞                                         뒤
+인덱스 0                           인덱스 length - 1
+        ["A", "B", "C"]
 ```
 
-현재 반복만 건너뛰고 다음 반복 진행:
+| 문법 | 어느 쪽? | 동작 | 반환값 | 원본 변경 |
+| --- | --- | --- | --- | --- |
+| `array.push(value)` | 뒤 | 값 추가 | 변경 후 길이 | O |
+| `array.pop()` | 뒤 | 값 제거 | 제거한 값 | O |
+| `array.unshift(value)` | 앞 | 값 추가 | 변경 후 길이 | O |
+| `array.shift()` | 앞 | 값 제거 | 제거한 값 | O |
+
+`push()`와 `unshift()`는 넣은 값이 아니라 변경된 배열의 길이를 반환한다.
 
 ```javascript
-for (const value of values) {
-  if (value < 0) {
-    continue;
-  }
+const values = ["A"];
 
-  console.log(value);
-}
+const length = values.push("B"); // 2
+const removed = values.pop();     // "B"
 ```
 
-함수 자체를 종료하며 결과 반환:
+빈 배열에서 `pop()`이나 `shift()`를 호출하면 오류 대신 `undefined`가 반환된다.
 
-```javascript
-function findValue(values, target) {
-  for (let i = 0; i < values.length; i++) {
-    if (values[i] === target) {
-      return i;
-    }
-  }
+### 스택으로 사용
 
-  return -1;
-}
-```
-
-### forEach 사용 시 주의
-
-`forEach()` 콜백 내부의 `return`은 바깥 함수를 종료하지 않는다.
-
-```javascript
-function findValue(values, target) {
-  values.forEach((value, index) => {
-    if (value === target) {
-      return index; // findValue의 반환값이 되지 않음
-    }
-  });
-}
-```
-
-반복 중 결과를 즉시 반환하거나 `break`해야 하는 알고리즘에서는 일반 `for`문 또는 `for...of`를 사용한다.
-
-## 10. 배열을 스택으로 사용
-
-JavaScript에는 별도의 내장 `Stack` 클래스가 없으므로 보통 배열을 사용한다.
+스택은 마지막에 넣은 값을 먼저 꺼내는 LIFO 구조다. 배열의 같은 쪽을 사용하는 `push()`와 `pop()`을 한 쌍으로 기억한다.
 
 ```javascript
 const stack = [];
@@ -463,9 +403,40 @@ const removed = stack.pop();         // 맨 위 값을 제거하며 반환
 const isEmpty = stack.length === 0;   // 빈 스택인지 확인
 ```
 
-스택은 마지막에 넣은 값을 먼저 꺼내는 LIFO 구조다. 빈 스택에서 `pop()`을 호출하면 `undefined`가 반환된다.
+맨 위 값을 제거하지 않고 확인할 때는 마지막 인덱스를 조회한다.
 
-## 11. 문자 비교
+```javascript
+const top = stack[stack.length - 1];
+```
+
+`push()`와 `pop()`은 배열 뒤쪽을 사용하므로 평균 `O(1)`이다. `shift()`와 `unshift()`는 기존 원소들을 이동해야 하므로 `O(n)`이다.
+
+### 배열 조회와 복사
+
+| 문법 | 의미 | 원본 변경 |
+| --- | --- | --- |
+| `array.length` | 원소 개수 | X |
+| `array.includes(value)` | 값 포함 여부 | X |
+| `array.indexOf(value)` | 값의 첫 인덱스, 없으면 `-1` | X |
+| `[...array]` | 얕은 복사 | X |
+| `array.slice(start, end)` | 일부 범위를 새 배열로 복사 | X |
+| `array.splice(start, count)` | 원본에서 일부 원소 제거 | O |
+
+### 새 배열을 만드는 메서드
+
+```javascript
+const doubled = numbers.map(number => number * 2);
+const positives = numbers.filter(number => number > 0);
+const found = numbers.find(number => number === target);
+```
+
+- `map()`: 각 값을 변환한 새 배열 반환
+- `filter()`: 조건을 만족한 값들로 새 배열 반환
+- `find()`: 첫 번째 일치 값 반환, 없으면 `undefined`
+
+`Map` 자료구조와 배열의 `map()` 메서드는 서로 다른 기능이다.
+
+## 10. 문자 비교
 
 JavaScript에는 별도의 `char` 타입이 없다. 한 글자도 `string`이므로 `===`로 비교한다.
 
@@ -485,7 +456,7 @@ if (stack[stack.length - 1] === expected) {
 }
 ```
 
-## 12. ==와 ===의 차이
+## 11. ==와 ===의 차이
 
 `==`는 비교 전에 타입을 자동 변환하고, `===`는 타입과 값이 모두 같은지 비교한다.
 
@@ -542,7 +513,6 @@ assert.deepStrictEqual(actual, expected);
 ```javascript
 Array.isArray(value)
 typeof value === "string"
-value.trim().length === 0
 Number.isFinite(value)
 
 const map = new Map()
@@ -550,12 +520,16 @@ const initializedMap = new Map([[key1, value1], [key2, value2]])
 map.has(key)
 map.get(key)
 map.set(key, value)
+map.delete(key)
+map.size
 
-const stack = []
-stack.push(value)
-stack[stack.length - 1]
-stack.pop()
-stack.length === 0
+const array = []
+array.push(value)               // 뒤에 추가
+array.pop()                     // 뒤에서 제거
+array.unshift(value)            // 앞에 추가
+array.shift()                   // 앞에서 제거
+array[array.length - 1]         // 마지막 값 확인
+array.length === 0
 
 charA === charB
 charA !== charB
