@@ -1,5 +1,56 @@
 # Java 코딩 테스트 직전 복습
 
+## 터미널에서 Java 컴파일과 실행
+
+`autowinni` 폴더에서 다음 순서로 실행한다.
+
+```bash
+javac -d out src/D4Solution.java
+java -cp out D4Solution
+```
+
+### 컴파일
+
+```bash
+javac -d out src/D4Solution.java
+```
+
+- `javac`: `.java` 소스 코드를 `.class` 바이트코드로 컴파일한다.
+- `-d out`: 만들어진 `.class` 파일을 `out` 폴더에 저장한다.
+- `src/D4Solution.java`: 컴파일할 소스 파일의 경로다.
+
+결과적으로 다음 파일이 만들어진다.
+
+```text
+src/D4Solution.java → out/D4Solution.class
+```
+
+`out` 폴더가 없다면 `javac`가 출력 폴더를 만든다.
+
+### 실행
+
+```bash
+java -cp out D4Solution
+```
+
+- `java`: JVM에서 컴파일된 클래스를 실행한다.
+- `-cp out`: 클래스를 찾을 기준 폴더를 `out`으로 지정한다. `cp`는 classpath의 약자다.
+- `D4Solution`: 실행할 클래스 이름이다. `.class`나 `out/`을 붙이지 않는다.
+- `D4Solution`의 `public static void main(String[] args)`가 실행된다.
+
+코드를 수정한 뒤에는 첫 번째 `javac` 명령으로 다시 컴파일해야 한다. 다시 컴파일하지 않고 `java`만 실행하면 이전 `.class` 파일이 실행된다.
+
+클래스에 package가 있다면 실행할 때 전체 이름을 사용한다.
+
+```java
+package practice;
+```
+
+```bash
+javac -d out src/D4Solution.java
+java -cp out practice.D4Solution
+```
+
 ## 여러 조건을 직접 비교하는 Comparator
 
 여러 정렬 조건의 오름차순과 내림차순이 섞여 있을 때는 람다에서 조건을 순서대로 비교하면 동작을 이해하기 쉽다.
